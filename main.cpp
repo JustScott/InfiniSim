@@ -367,6 +367,7 @@ Pinetime::Controllers::AlarmController alarmController {dateTimeController, fs};
 #else
 Pinetime::Controllers::AlarmController alarmController {dateTimeController};
 #endif
+Pinetime::Controllers::SleepController sleepController {dateTimeController, fs};
 Pinetime::Controllers::TouchHandler touchHandler;
 Pinetime::Controllers::ButtonHandler buttonHandler;
 Pinetime::Controllers::BrightnessController brightnessController {};
@@ -386,6 +387,7 @@ Pinetime::Applications::DisplayApp displayApp(lcd,
                                               timerController,
                                               #endif
                                               alarmController,
+                                              sleepController,
                                               brightnessController,
                                               touchHandler,
                                               fs,
@@ -402,6 +404,7 @@ Pinetime::System::SystemTask systemTask(spi,
                                         timerController,
                                         #endif
                                         alarmController,
+                                        sleepController,
                                         watchdog,
                                         notificationManager,
                                         heartRateSensor,
@@ -947,14 +950,8 @@ public:
         settingsController.SetWatchFace(Pinetime::Applications::WatchFace::PineTimeStyle);
         displayApp.StartApp(Pinetime::Applications::Apps::Clock, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
       }
-      else if (screen_idx == 4) {
-        displayApp.StartApp(Pinetime::Applications::Apps::Paddle, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
-      }
-      else if (screen_idx == 5) {
-        displayApp.StartApp(Pinetime::Applications::Apps::Twos, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
-      }
-      else if (screen_idx == 6) {
-        displayApp.StartApp(Pinetime::Applications::Apps::Metronome, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
+      else if (screen_idx == 4 || screen_idx == 5 || screen_idx == 6 || screen_idx == 12) {
+        displayApp.StartApp(Pinetime::Applications::Apps::BatteryInfo, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
       }
       else if (screen_idx == 7) {
         displayApp.StartApp(Pinetime::Applications::Apps::FirmwareUpdate, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
@@ -970,9 +967,6 @@ public:
       }
       else if (screen_idx == 11) {
         displayApp.StartApp(Pinetime::Applications::Apps::Music, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
-      }
-      else if (screen_idx == 12) {
-        displayApp.StartApp(Pinetime::Applications::Apps::Paint, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
       }
       else if (screen_idx == 13) {
         displayApp.StartApp(Pinetime::Applications::Apps::SysInfo, Pinetime::Applications::DisplayApp::FullRefreshDirections::None);
